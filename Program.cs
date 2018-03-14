@@ -48,8 +48,9 @@ namespace Zapster.Console
             Console.WriteLine();
             Console.WriteLine("1: Unauthenticated Heartbeat");
             Console.WriteLine("2: Create Test Wallets");
-            Console.WriteLine("3: Create Transaction");
-            Console.WriteLine("4: Get Transaction");
+            Console.WriteLine("3: Currency Exchange");
+            Console.WriteLine("4: Create Transaction");
+            Console.WriteLine("5: Get Transaction");
             Console.WriteLine();
             Console.WriteLine("exit: Close Console");
 
@@ -66,15 +67,30 @@ namespace Zapster.Console
                         CreateTestWallets();
                         break;
                     case "3":
+                        CurrencyExchange();
+                        break;
+                    case "5":
                         CreateTransaction();
                         break;
-                    case "4":
+                    case "6":
                         GetTransaction();
                         break;
                     case "exit":
                         Environment.Exit(0);
                         break;
                 }
+            }
+        }
+
+        private static void CurrencyExchange()
+        {
+            using (var client = new ZapsterApiClient(apiEndpoint))
+            {
+                Console.WriteLine("\nRequest: {0}/exchange", apiEndpoint);
+                var result = client.Exchange.Calculate(account, CurrencyCode.CHF, 9.990M);
+                Console.WriteLine("\t- Currency Exchange Data:");
+                Console.WriteLine("\t rate ({0})", result.Rate);
+                Console.WriteLine("\t amount ({0})", result.Amount);
             }
         }
 
